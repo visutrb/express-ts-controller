@@ -1,10 +1,13 @@
-#Express TypeScript Controller
+Express TypeScript Controller
+=============================
 
-##Installation
+Installation
+------------
 
     $ npm install --save express-ts-controller
 
-##Usage
+Usage
+-----
 
 To register controllers, simply pass the reference of each controller to the `initialize` function as follow:
 
@@ -47,7 +50,8 @@ Mapping the controller:
    
 You can use `@Get, @Post, @Patch, @Put, @Delete` to map your request with the corresponding HTTP verbs.
 
-##Request Authentication
+Request Authentication
+----------------------
 
 This module is designed to work with `passport.js`, assumed that you declared a middle ware for passport as follow:
  
