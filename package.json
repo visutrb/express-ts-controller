@@ -1,0 +1,29 @@
+{
+  "name": "express-ts-controller",
+  "version": "0.1.1",
+  "description": "Map TypeScript classes to express.js routes.",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "keywords": [
+    "express",
+    "typescript",
+    "controller"
+  ],
+  "author": "Visutr Boonnateephisit",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.2",
+    "passport": "^0.3.2",
+    "typescript": "^2.3.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.0.35",
+    "@types/node": "^7.0.18",
+    "@types/passport": "^0.3.3",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-typescript": "^3.1.6"
+  }
+}
