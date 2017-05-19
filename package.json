@@ -20,11 +20,18 @@
   },
   "devDependencies": {
     "@types/express": "^4.0.35",
+    "@types/mocha": "^2.2.41",
     "@types/node": "^7.0.18",
     "@types/passport": "^0.3.3",
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
-    "gulp-typescript": "^3.1.6"
+    "gulp-mocha": "^4.3.1",
+    "gulp-typescript": "^3.1.6",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.4.1",
+    "passport-custom": "^1.0.5"
   },
   "repository": {
     "type": "git",

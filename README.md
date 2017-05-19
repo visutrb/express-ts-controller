@@ -22,7 +22,7 @@ To register controllers, simply pass the reference of each controller to the `in
     import { GreetingController } from "./controllers/GreetingController";
     
     // express app initialization
-    const app: express.Express = Express();
+    const app: express.Express = express();
     ...
     
     initialize(app, [

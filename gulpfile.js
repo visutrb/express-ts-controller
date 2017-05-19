@@ -15,11 +15,18 @@ gulp.task('clean', () => {
     return gulp.src(['dist', 'express-ts-controller-*.tgz']).pipe(clean());
 });
 
-gulp.task('prepackage', ['build'], () => {
+
+gulp.task('test', ['build'], (done) => {
+    return gulp.src('dist/test/mocha-tests/**/*.js')
+        .pipe(mocha())
+        .pipe(istanbul.writeReports());
+});
+
+gulp.task('pre-package', ['build'], () => {
     return gulp.src(['package.json', 'README.md']).pipe(gulp.dest('dist/main'));
 });
 
-gulp.task('pack', ['prepackage'], (done) => {
+gulp.task('pack', ['pre-package'], (done) => {
     console.log('');
     let npm = spawn('npm', ['pack', 'dist/main']);
 
