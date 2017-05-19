@@ -40,7 +40,7 @@ gulp.task('pack', ['pre-package'], (done) => {
     });
 });
 
-gulp.task('publish', ['prepackage'], (done) => {
+gulp.task('publish', ['pre-package'], (done) => {
     console.log('');
     let npm = spawn('npm', ['publish', 'dist/main']);
 
