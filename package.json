@@ -25,5 +25,9 @@
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
     "gulp-typescript": "^3.1.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Visutr/express-ts-controller.git"
   }
 }
