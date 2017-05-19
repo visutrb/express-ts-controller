@@ -1,5 +1,6 @@
 Express TypeScript Controller
 =============================
+![build-status](https://travis-ci.org/Visutr/express-ts-controller.svg?branch=master)
 
 Installation
 ------------
