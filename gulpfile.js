@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var clean = require('gulp-clean');
 var ts = require('gulp-typescript');
+var mocha = require('gulp-mocha');
 
 var spawn = require('child_process').spawn;
 
@@ -16,10 +17,9 @@ gulp.task('clean', () => {
 });
 
 
-gulp.task('test', ['build'], (done) => {
+gulp.task('test', ['build'], () => {
     return gulp.src('dist/test/mocha-tests/**/*.js')
-        .pipe(mocha())
-        .pipe(istanbul.writeReports());
+        .pipe(mocha());
 });
 
 gulp.task('pre-package', ['build'], () => {
