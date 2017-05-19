@@ -16,7 +16,7 @@ gulp.task('clean', () => {
 });
 
 gulp.task('prepackage', ['build'], () => {
-    return gulp.src('package.json').pipe(gulp.dest('dist/main'));
+    return gulp.src(['package.json', 'README.md']).pipe(gulp.dest('dist/main'));
 });
 
 gulp.task('pack', ['prepackage'], (done) => {
