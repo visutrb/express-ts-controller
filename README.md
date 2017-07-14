@@ -7,6 +7,12 @@ Installation
 
     $ npm install --save express-ts-controller
 
+What's new in 0.2.0
+-------------------
+1. Add support for `glob` to initialize the controllers.
+2. Handle promise rejection and pass the error through `next()`.
+
+
 Usage
 -----
 
@@ -30,8 +36,24 @@ To register controllers, simply pass the reference of each controller to the `in
         SiteController,
         GreetingController
     ]);
+
+or 
+
+    // app.ts
+    import * as expres from "express";
+    import * as path from "path
     
-The `initialize` function make sure that you can access instance variables declared inside your class.
+    import { initialize } from "express-ts-controller";
+        
+    // express app initialization
+    const app: express.Express = express();
+    ...
+    
+    initialize(app, [
+        path.join(__dirname, "./controllers/**/*.ts",
+        path.join(__dirname, "./controllers/**/*.js"
+    ]);
+
     
 Mapping the controller:
     

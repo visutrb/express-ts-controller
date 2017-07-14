@@ -1,8 +1,11 @@
 import { AuthenticationOptions } from "../interfaces/AuthenticationOptions";
-import { mapRequestForAuthentication } from "../core/manager";
+import { authenticateRequest } from "../core/manager";
 
-export function Authenticate(options: AuthenticationOptions) {
+export function Authenticate(option: string | AuthenticationOptions) {
     return (target, propertyName: string) => {
-        mapRequestForAuthentication(target, propertyName, options);
+        if (typeof option == "string")
+            authenticateRequest(target, propertyName, [<string> option]);
+        else
+            authenticateRequest(target, propertyName, (<AuthenticationOptions> option).strategies);
     }
 }

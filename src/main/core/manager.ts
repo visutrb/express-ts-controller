@@ -1,80 +1,94 @@
+import * as bluebird from "bluebird";
+import * as express from "express";
+import { Express, Router } from "express";
+import * as glob from "glob";
 import * as passport from "passport";
+import * as multer from "multer";
 
-import { Express } from "express";
-import { AuthenticationOptions } from "../interfaces/AuthenticationOptions";
+import { RequestMapping } from "../interfaces/RequestMapping";
+import { AuthenticationMapping } from "../interfaces/AuthenticationMapping";
+import { MultipartOptions } from "../interfaces/MultipartOptions";
 
-let _app: Express;
-let _requestMappings = new Array();
-let _requestAuthentications = new Array();
+let routers = new Array<Router>();
 
-export function initialize(app: Express, targets: Array<any>) {
-    _app = app;
+let requestMappings = new Array<RequestMapping>();
+let authMappings = new Array<AuthenticationMapping>();
+
+const globPromise = bluebird.promisify(glob);
+
+export async function initialize(app: Express, targets: Array<Function> | Array<string>) {
     for (let target of targets) {
-        let controller = new target();
+        if (typeof target != "string") break;
+        let files: any = await globPromise(target);
 
-        for (let mapping of _requestMappings) {
+        let filteredFiles = files.filter(file => {
+            return !file.endsWith(".d.ts")
+        });
 
-            if (mapping.target == target.name) {
-                route(mapping, controller);
+        for (let file of filteredFiles) {
+            require(file);
+        }
+    }
+
+    for (let router of routers) {
+        app.use(router);
+    }
+}
+
+export function createRouter(target, baseUrls: string[]) {
+    let router = express.Router();
+    let controller = new target();
+
+    for (let baseUrl of baseUrls) {
+        let filteredMappings = requestMappings.filter(mapping => {
+            return mapping.targetName == target.name;
+        });
+
+        for (let mapping of filteredMappings) {
+            let method = mapping.method;
+            let uri: string;
+
+            if (baseUrl == "/") uri = mapping.path;
+            else uri = `${baseUrl}${mapping.path}`;
+
+            let requestMiddleware = function(req, res, next) {
+                let ret = controller[mapping.functionName](req, res, next);
+                if (ret != null && ret["catch"] != null && typeof ret["catch"] == "function") {
+                    // Handle promise rejection, if the mapped function throws any error.
+                    ret.catch(err => {
+                        next(err);
+                    });
+                }
+            };
+
+            let authMapping = authMappings.find(aMapping => {
+                return (aMapping.targetName == mapping.targetName) && (aMapping.functionName == mapping.functionName);
+            });
+
+            if (authMapping) {
+                router[method](uri, passport.authenticate(authMapping.strategies), requestMiddleware);
+            } else {
+                router[method](uri, requestMiddleware);
             }
         }
     }
+    routers.push(router);
 }
 
-export function mapController(baseUrl: string, target) {
-    for (let mapping of _requestMappings) {
-        if (mapping.target == target.name) {
-            mapping.baseUrl = baseUrl;
-        }
-    }
-}
-
-export function mapRequest(method: "get" | "post" | "patch" | "put" | "delete", path: string, target, propertyName: string) {
-    _requestMappings.push({
+export function mapRequest(target, functionName: string,
+                           method: "get" | "post" | "patch" | "put" | "delete", path: string) {
+    requestMappings.push({
+        targetName: target.constructor.name,
+        functionName: functionName,
         method: method,
-        path: path,
-        target: target.constructor.name,
-        propertyName: propertyName
+        path: path
     });
 }
 
-export function mapRequestForAuthentication(target, propertyName: string, options: AuthenticationOptions) {
-    _requestAuthentications.push({
-        target: target,
-        propertyName: propertyName,
-        strategies: options.strategies
+export function authenticateRequest(target, functionName: string, strategies: Array<string>) {
+    authMappings.push({
+        targetName: target.constructor.name,
+        functionName: functionName,
+        strategies: strategies
     });
-}
-
-function route(mapping, controller) {
-    let propertyName = mapping.propertyName;
-    let method = mapping.method;
-    let baseUrl = mapping.baseUrl;
-    let path = mapping.path;
-    let authenticationStrategies: Array<string> = null;
-
-    if (baseUrl != "/") {
-        if (path == "/") {
-            path = baseUrl;
-        } else {
-            path = baseUrl + path;
-        }
-    }
-
-    for (let requestAuthentication of _requestAuthentications) {
-        if (requestAuthentication.target.constructor.name == mapping.target &&
-            requestAuthentication.propertyName == propertyName) {
-            authenticationStrategies = requestAuthentication.strategies;
-        }
-    }
-
-    if (authenticationStrategies == null) {
-        _app[method](path, (req, res, next) => {
-            controller[propertyName](req, res, next);
-        });
-    } else {
-        _app[method](path, passport.authenticate(authenticationStrategies), (req, res, next) => {
-            controller[propertyName](req, res, next);
-        });
-    }
 }

@@ -1,7 +1,12 @@
-import { mapController } from "../core/manager";
+import { createRouter } from "../core/manager";
 
-export function Controller(baseUrl?: string) {
+export function Controller(baseUrl?: string | string[]) {
     return (target) => {
-        mapController(baseUrl || "/", target);
+        if (baseUrl == null)
+            createRouter(target, ["/"]);
+        else if (typeof (baseUrl) == "string")
+            createRouter(target, [baseUrl]);
+        else
+            createRouter(target, baseUrl);
     }
 }

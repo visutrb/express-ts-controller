@@ -5,25 +5,32 @@ var mocha = require('gulp-mocha');
 
 var spawn = require('child_process').spawn;
 
-var tsProject = ts.createProject('tsconfig.json');
+gulp.task('default', ['build']);
+gulp.task('build', ['buildMain', 'buildTest']);
 
-gulp.task('build', ['clean'], () => {
-    var tsResult = gulp.src('src/**/*.ts').pipe(tsProject());
-    return tsResult.pipe(gulp.dest('dist'));
+gulp.task('buildMain', ['clean'], () => {
+    var tsProject = ts.createProject('tsconfig.json');
+    var tsResult = gulp.src('src/main/**/*.ts').pipe(tsProject());
+    return tsResult.pipe(gulp.dest('build/main'));
+});
+
+gulp.task('buildTest', ['buildMain'], () => {
+    var tsProject = ts.createProject('tsconfig.json');
+    var tsResult = gulp.src('src/test/**/*.ts').pipe(tsProject());
+    return tsResult.pipe(gulp.dest('build/test'));
 });
 
 gulp.task('clean', () => {
-    return gulp.src(['dist', 'express-ts-controller-*.tgz']).pipe(clean());
+    return gulp.src(['build', 'express-ts-controller-*.tgz']).pipe(clean());
 });
 
-
-gulp.task('test', ['build'], () => {
-    return gulp.src('dist/test/mocha-tests/**/*.js')
+gulp.task('test', ['buildTest'], () => {
+    return gulp.src('build/test/specs/**/*.js')
         .pipe(mocha());
 });
 
-gulp.task('pre-package', ['build'], () => {
-    return gulp.src(['package.json', 'README.md']).pipe(gulp.dest('dist/main'));
+gulp.task('pre-package', ['buildMain'], () => {
+    return gulp.src(['package.json', 'README.md']).pipe(gulp.dest('build/main'));
 });
 
 gulp.task('pack', ['pre-package'], (done) => {
@@ -42,7 +49,7 @@ gulp.task('pack', ['pre-package'], (done) => {
 
 gulp.task('publish', ['pre-package'], (done) => {
     console.log('');
-    let npm = spawn('npm', ['publish', 'dist/main']);
+    let npm = spawn('npm', ['publish', 'build/main']);
 
     npm.stdout.on('data', (data) => {
         process.stdout.write(data.toString());

@@ -6,9 +6,9 @@
         "emitDecoratorMetadata": true,
         "noImplicitAny": false,
         "declaration": true,
-        "sourceMap": false,
-        "rootDir": "src",
-        "outDir": "dist"
+        "sourceMap": true,
+        "outDir": "build",
+        "rootDir" : "src"
     },
     "exclude": [
         "node_modules"
