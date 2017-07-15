@@ -35,7 +35,7 @@ gulp.task('pre-package', ['buildMain'], () => {
 
 gulp.task('pack', ['pre-package'], (done) => {
     console.log('');
-    let npm = spawn('npm', ['pack', 'dist/main']);
+    let npm = spawn('npm', ['pack', './build/main']);
 
     npm.stdout.on('data', (data) => {
         process.stdout.write(data.toString());
@@ -49,7 +49,7 @@ gulp.task('pack', ['pre-package'], (done) => {
 
 gulp.task('publish', ['pre-package'], (done) => {
     console.log('');
-    let npm = spawn('npm', ['publish', 'build/main']);
+    let npm = spawn('npm', ['publish', './build/main']);
 
     npm.stdout.on('data', (data) => {
         process.stdout.write(data.toString());

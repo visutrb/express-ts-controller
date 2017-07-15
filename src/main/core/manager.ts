@@ -3,7 +3,6 @@ import * as express from "express";
 import { Express, Router } from "express";
 import * as glob from "glob";
 import * as passport from "passport";
-import * as multer from "multer";
 
 import { RequestMapping } from "../interfaces/RequestMapping";
 import { AuthenticationMapping } from "../interfaces/AuthenticationMapping";
