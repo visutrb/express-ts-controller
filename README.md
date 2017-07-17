@@ -6,6 +6,10 @@ Installation
 ------------
 
     $ npm install --save express-ts-controller
+    
+What's new in 0.2.1
+-------------------
+No implementation change, only README was updated.
 
 What's new in 0.2.0
 -------------------
@@ -35,7 +39,7 @@ To register controllers, simply pass the reference of each controller to the `in
     initialize(app, [
         SiteController,
         GreetingController
-    ]);
+    ]).then(() => {...});
 
 or 
 
@@ -52,7 +56,7 @@ or
     initialize(app, [
         path.join(__dirname, "./controllers/**/*.ts",
         path.join(__dirname, "./controllers/**/*.js"
-    ]);
+    ]).then(() => {...});
 
     
 Mapping the controller:
