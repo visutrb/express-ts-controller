@@ -6,6 +6,10 @@ Installation
 ------------
 
     $ npm install --save express-ts-controller
+
+What's new in 0.2.2
+-------------------
+Create new instance of controller per request.
     
 What's new in 0.2.1
 -------------------

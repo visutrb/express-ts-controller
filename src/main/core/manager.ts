@@ -36,8 +36,6 @@ export async function initialize(app: Express, targets: Array<Function> | Array<
 
 export function createRouter(target, baseUrls: string[]) {
     let router = express.Router();
-    let controller = new target();
-
     for (let baseUrl of baseUrls) {
         let filteredMappings = requestMappings.filter(mapping => {
             return mapping.targetName == target.name;
@@ -51,12 +49,11 @@ export function createRouter(target, baseUrls: string[]) {
             else uri = `${baseUrl}${mapping.path}`;
 
             let requestMiddleware = function(req, res, next) {
+                let controller = new target();
                 let ret = controller[mapping.functionName](req, res, next);
                 if (ret != null && ret["catch"] != null && typeof ret["catch"] == "function") {
                     // Handle promise rejection, if the mapped function throws any error.
-                    ret.catch(err => {
-                        next(err);
-                    });
+                    ret.catch(err => next(err));
                 }
             };
 
@@ -65,10 +62,9 @@ export function createRouter(target, baseUrls: string[]) {
             });
 
             if (authMapping) {
-                router[method](uri, passport.authenticate(authMapping.strategies), requestMiddleware);
-            } else {
-                router[method](uri, requestMiddleware);
+                router[method](uri, passport.authenticate(authMapping.strategies));
             }
+            router[method](uri, requestMiddleware);
         }
     }
     routers.push(router);
