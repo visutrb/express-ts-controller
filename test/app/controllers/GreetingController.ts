@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Controller, Get } from "../../../main/index";
+import { Controller, Get } from "../../../lib/index";
 
 @Controller("/greet")
 export class GreetingController {

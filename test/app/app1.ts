@@ -3,8 +3,8 @@ import * as bodyParser from "body-parser";
 import * as path from "path";
 import * as passportLocal from "passport-local";
 
-import { initialize } from "../../main/core/manager";
-import * as passport from "passport";
+import { initialize } from "../../lib/core/manager";
+import * as passport from "../../lib/core/node_modules/passport";
 
 const app = express();
 const port = 3000;

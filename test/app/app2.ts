@@ -1,9 +1,9 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import * as passport from "passport";
+import * as passport from "../../lib/core/node_modules/passport";
 import * as passportLocal from "passport-local";
 
-import { initialize } from "../../main/core/manager";
+import { initialize } from "../../lib/core/manager";
 import { SiteController } from "./controllers/SiteController";
 import { GreetingController } from "./controllers/GreetingController";
 

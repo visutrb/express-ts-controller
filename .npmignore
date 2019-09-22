@@ -1,0 +1,9 @@
+.idea
+.vscode
+.DS_Store
+.gitignore
+.travis.yml
+build
+test
+
+express-ts-controller*.tgz

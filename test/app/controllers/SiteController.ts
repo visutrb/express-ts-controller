@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Controller, Get, Post, Patch, Put, Delete } from "../../../main/index";
-import { Authenticate } from "../../../main/decorators/Authenticate";
+import { Controller, Get, Post, Patch, Put, Delete } from "../../../lib/index";
+import { Authenticate } from "../../../lib/decorators/Authenticate";
 
 @Controller("/")
 export class SiteController {
