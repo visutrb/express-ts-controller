@@ -1,10 +1,13 @@
 .idea
 .vscode
 .DS_Store
+example
+src
+test
+.editorconfig
 .gitignore
 .travis.yml
-build
-example
-test
+gulpfile.js
+tsconfig.json
 
 express-ts-controller*.tgz

@@ -26,7 +26,9 @@ gulp.task('clean', () => {
 
 gulp.task('test', ['buildTest'], () => {
     return gulp.src('build/test/specs/**/*.js')
-        .pipe(mocha());
+        .pipe(mocha({
+            
+        }));
 });
 
 gulp.task('pre-package', ['buildMain'], () => {
