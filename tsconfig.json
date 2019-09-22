@@ -6,11 +6,15 @@
         "emitDecoratorMetadata": true,
         "noImplicitAny": false,
         "declaration": true,
-        "sourceMap": true,
+        "sourceMap": false,
         "outDir": "build",
         "rootDir" : "src"
     },
+    "include": [
+        "src"
+    ],
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "test"
     ]
 }
