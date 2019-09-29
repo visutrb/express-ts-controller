@@ -14,11 +14,8 @@
   "author": "Visutr Boonnateephisit",
   "license": "MIT",
   "dependencies": {
-    "bluebird": "^3.5.0",
     "express": "^4.15.2",
-    "glob": "^7.1.2",
-    "nyc": "^14.1.1",
-    "typescript": "^3.6.3"
+    "glob": "^7.1.2"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.8",
@@ -35,7 +32,10 @@
     "gulp-mocha": "^7.0.1",
     "gulp-typescript": "^5.0.1",
     "mocha": "^6.2.0",
-    "ts-node": "^8.4.1"
+    "nyc": "^14.1.1",
+    "reflect-metadata": "^0.1.13",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
   },
   "repository": {
     "type": "git",
