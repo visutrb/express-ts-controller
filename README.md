@@ -7,10 +7,15 @@ Installation
 
     $ npm install --save express-ts-controller
 
+What's new in 1.0.0
+-------------------
+1. Mount middlewares before or after executing the handler.
+2. @Authenticate decorator is removed. Use middleware to authenticate your requests.
+
 What's new in 0.2.2
 -------------------
 Create new instance of controller per request.
-    
+
 What's new in 0.2.1
 -------------------
 No implementation change, only README was updated.
@@ -26,90 +31,83 @@ Usage
 
 To register controllers, simply pass the reference of each controller to the `initialize` function as follow:
 
+```typescript
     // app.ts
     import * as express from "express";
     ...
-    
+
     import { initialize } from "express-ts-controller";
-    
+
     // import your controller from anywhere
     import { SiteController } from "./controllers/SiteController";
     import { GreetingController } from "./controllers/GreetingController";
-    
+
     // express app initialization
     const app: express.Express = express();
     ...
-    
+
     initialize(app, [
         SiteController,
         GreetingController
-    ]).then(() => {...});
+    ]);
+```
 
-or 
+or
 
+```typescript
     // app.ts
     import * as expres from "express";
-    import * as path from "path
-    
+    import * as path from "path";
+
     import { initialize } from "express-ts-controller";
-        
+
     // express app initialization
     const app: express.Express = express();
     ...
-    
-    initialize(app, [
-        path.join(__dirname, "./controllers/**/*.ts",
-        path.join(__dirname, "./controllers/**/*.js"
-    ]).then(() => {...});
 
-    
-Mapping the controller:
-    
+    initialize(app, [
+        path.join(__dirname, "./controllers/**/*.{ts,js}"),
+    ]);
+```
+
+then map request to the controller:
+
+```typescript
     // GreetingController.ts
     import { Controller, Get } from "express-ts-controller";
     import { Request, Response } from "express";
-    
+
     @Controller("/greeting")
     export class GreetingController {
-    
+
         @Get("/")
         greet(req: Request, res: Response) {
-            let name = req.query["name"] || "World";
+            const name = req.query["name"] || "World";
             res.render("greet", { name: name });
         }
     }
-   
+```
+
 You can use `@Get, @Post, @Patch, @Put, @Delete` to map your request with the corresponding HTTP verbs.
 
-Request Authentication
-----------------------
+Mounting middlewares
+---
 
-This module is designed to work with `passport.js`, assumed that you declared a middle ware for passport as follow:
- 
-    import * as passport from "passport";
-    import * as passportLocal from "passport-local";
-    
-    const LocalStrategy = passportLocal.Strategy;
-    
-    passport.use("local", new LocalStrategy((username, password, done) => {
-        ...
-    }));
-    
-you can use the middleware by using `@Authenticate` decorator:
+Every request decorator (`@Get`, `@Post`, `@Path`, `@Put`, and `@Delete`) comes with options for mounting middlewares:
 
-    // AuthenticationController.ts
-    import { Controller, Post, Authenticate } from "express-ts-controller";
-    import { Request, Response } from "express";
-    
-    @Controller("/auth")
-    export class AuthenticationController {
-        
-        @Post("/sign_in")
-        @Authenticate({ strategies: ["local"] })
-        signIn(req: Request, res: Response) {
-            let user = req["user"];
+```typescript
+    @Controller("/images")
+    export class ImagesController {
+
+        @Post("", {
+            beforeAction: [authenticated, uploadImage],
+            afterAction: [duplicateImage]
+        })
+        upload(req: Request, res: Response) {
             ...
+            next();
         }
     }
-    
-Note that the `strategies` parameter is of `Array` type, which means that it is possible to use several strategies.
+```
+
+From the above example, your request will be passed through `authenticated`, `uploadImage`, `ImageController#upload`, then `duplicateImage` sequentially.
