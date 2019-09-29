@@ -103,7 +103,7 @@ Every request decorator (`@Get`, `@Post`, `@Path`, `@Put`, and `@Delete`) comes 
             beforeAction: [authenticated, uploadImage],
             afterAction: [duplicateImage]
         })
-        upload(req: Request, res: Response) {
+        upload(req: Request, res: Response, next: NextFunction) {
             ...
             next();
         }
