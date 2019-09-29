@@ -43,7 +43,7 @@ To register controllers, simply pass the reference of each controller to the `in
     import { GreetingController } from "./controllers/GreetingController";
 
     // express app initialization
-    const app: express.Express = express();
+    const app: express.Application = express();
     ...
 
     initialize(app, [
@@ -62,7 +62,7 @@ or
     import { initialize } from "express-ts-controller";
 
     // express app initialization
-    const app: express.Express = express();
+    const app: express.Application = express();
     ...
 
     initialize(app, [
